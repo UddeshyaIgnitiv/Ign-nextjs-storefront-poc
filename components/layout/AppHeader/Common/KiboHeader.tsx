@@ -20,6 +20,7 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 import { headerActionAreaStyles, kiboHeaderStyles, topHeaderStyles } from './KiboHeader.styles'
+import Logo from '@/assets/ignitiv-black.svg'
 import { KiboLogo } from '@/components/common'
 import { AccountHierarchyFormDialog } from '@/components/dialogs'
 import {
@@ -103,7 +104,7 @@ const HeaderActionArea = (props: HeaderActionAreaProps) => {
           }}
         >
           <Link href="/">
-            <KiboLogo />
+            <KiboLogo logo={Logo} />
           </Link>
         </Box>
         <NoSsr>

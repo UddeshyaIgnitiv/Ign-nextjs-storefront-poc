@@ -62,6 +62,7 @@ export const kiboHeaderStyles = {
     textAlign: 'center',
     position: 'relative',
     margin: 'auto',
+    top: '-20px',
     // minHeight: '70px',
     // width: '100%',
     justifyContent: 'center',

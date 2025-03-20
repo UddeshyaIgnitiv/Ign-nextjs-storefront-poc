@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
+import Logo from '@/assets/ignitiv-white.svg'
 import { KiboLogo } from '@/components/common'
 import { useGetCurrentOrder, useGetCurrentCheckout } from '@/hooks'
 
@@ -39,7 +40,7 @@ const CheckoutHeader = ({ isMultiShipEnabled }: { isMultiShipEnabled: boolean })
       <Container maxWidth="xl" sx={checkoutHeaderStyles.container} data-testid="checkout-header">
         <Box position="relative">
           <Link href="/" passHref>
-            <KiboLogo small />
+            <KiboLogo logo={Logo} />
           </Link>
         </Box>
 
