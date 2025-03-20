@@ -19,6 +19,25 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function(d, t) {
+                  let v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+                  v.onload = function() {
+                    window.voiceflow.chat.load({
+                      verify: { projectID: '67beb4164b2bd5ffce20d74a' },
+                      url: 'https://general-runtime.voiceflow.com',
+                      versionID: '67beb4164b2bd5ffce20d74b',
+                    });
+                  }
+                  v.src = "https://cdn.voiceflow.com/widget/bundle.mjs";
+                  v.type = "text/javascript";
+                  s.parentNode.insertBefore(v, s);
+                })(document, 'script');
+              `,
+            }}
+          />
         </body>
       </Html>
     )
