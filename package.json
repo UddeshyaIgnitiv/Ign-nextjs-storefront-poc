@@ -21,8 +21,7 @@
     "prepare": "husky install",
     "generate-docs:hooks": "npx typedoc --entryPointStrategy expand hooks/ --out docs/hooks --readme none --exclude \"**/*+(.spec)+(.ts|.tsx)\" --exclude \"**/index.ts\" ",
     "analyze": "cross-env ANALYZE=true next build",
-    "postbuild": "next-sitemap",
-    "chrome:insecure": "chrome --allow-running-insecure-content http://3.140.208.72:5000"
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@builder.io/react": "^2.0.9",
