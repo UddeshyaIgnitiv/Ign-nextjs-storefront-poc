@@ -19,7 +19,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import { SearchBar } from '@/components/common'
+import { AiSearchBar } from '@/components/common'
 import { useDebounce, useGetSearchSuggestion2 } from '@/hooks'
 
 const style = {
@@ -47,13 +47,13 @@ const style = {
   } as SxProps<Theme> | undefined,
 }
 
-interface SearchSuggestionsProps {
+interface AiSearchSuggestionsProps {
   onEnterSearch?: () => void
   isViewSearchPortal?: boolean
 }
 
 interface ListItemProps {
-  code?: any
+  code?: string
   name?: string
   path?: string
   onSearchSuggestionClose?: () => void
@@ -83,7 +83,7 @@ const Content = (props: ListItemProps) => {
   )
 }
 
-const SearchSuggestions = (props: SearchSuggestionsProps) => {
+const AiSearchSuggestions = (props: AiSearchSuggestionsProps) => {
   const { onEnterSearch, isViewSearchPortal } = props
   const { publicRuntimeConfig } = getConfig()
   const router = useRouter()
@@ -93,23 +93,22 @@ const SearchSuggestions = (props: SearchSuggestionsProps) => {
 
   const handleOpen = () => setIsOpen(true)
   const handleClose = () => setIsOpen(false)
-  const handleSearch = (userEnteredValue: string) => setSearchTerm(userEnteredValue)
+  const handleSearch = (userEnteredValue: string) => {
+    setSearchTerm(userEnteredValue)
+  }
   const handleEnterSearch = (value: string) => {
     router.push({ pathname: '/search', query: { search: value } })
     if (isViewSearchPortal) onEnterSearch?.()
     handleClose()
   }
 
-  const searchSuggestionResult = useGetSearchSuggestion2(
+  const { data } = useGetSearchSuggestion2(
     useDebounce(searchTerm.trim(), publicRuntimeConfig.debounceTimeout)
   )
 
-  const getSuggestionGroup = (title: string) =>
-    searchSuggestionResult.data
-      ? searchSuggestionResult.data?.suggestionGroups?.find((sg) => sg?.name === title)
-      : null
-  const productSuggestionGroup = getSuggestionGroup('Products')
-  const categorySuggestionGroup = getSuggestionGroup('Categories')
+  // Get product suggestions with safe access
+  const productSuggestions =
+    data.suggestionGroups?.find((g) => g.name === 'Products')?.suggestions || []
 
   useEffect(() => {
     searchTerm.trim() ? handleOpen() : handleClose()
@@ -118,7 +117,7 @@ const SearchSuggestions = (props: SearchSuggestionsProps) => {
   return (
     <Stack width="100%" position="relative" gap={1} sx={{ maxWidth: { xs: '100%', md: '65%' } }}>
       <Box sx={{ zIndex: 1400 }}>
-        <SearchBar
+        <AiSearchBar
           searchTerm={searchTerm}
           onSearch={handleSearch}
           onKeyEnter={handleEnterSearch}
@@ -134,19 +133,19 @@ const SearchSuggestions = (props: SearchSuggestionsProps) => {
       >
         <Paper sx={{ ...style.paper }}>
           <List sx={{ ...style.list }} role="group">
-            <Title heading="suggestions" />
-            {productSuggestionGroup?.suggestions?.map((product) => (
+            <Title heading="products" />
+            {productSuggestions.map(({ suggestion }) => (
               <Content
-                key={product?.suggestion?.productCode}
-                code={product?.suggestion?.productCode}
-                name={product?.suggestion?.productName}
-                path={'/product/'}
+                key={suggestion.productCode}
+                code={String(suggestion.productCode)}
+                name={suggestion.name}
+                path="/product/"
                 onSearchSuggestionClose={handleClose}
               />
             ))}
           </List>
           <Divider />
-          <List sx={{ ...style.list }} role="group">
+          {/* <List sx={{ ...style.list }} role="group">
             <Title heading="categories" />
             {categorySuggestionGroup?.suggestions?.map((category) => (
               <Content
@@ -157,11 +156,11 @@ const SearchSuggestions = (props: SearchSuggestionsProps) => {
                 onSearchSuggestionClose={handleClose}
               />
             ))}
-          </List>
+          </List> */}
         </Paper>
       </Collapse>
       <Backdrop open={isOpen} onClick={handleClose} data-testid="backdrop"></Backdrop>
     </Stack>
   )
 }
-export default SearchSuggestions
+export default AiSearchSuggestions

@@ -33,6 +33,7 @@ import {
   MegaMenu,
   MobileHeader,
   SearchSuggestions,
+  AiSearchSuggestions,
   StoreFinderIcon,
   SwitchAccountMenu,
 } from '@/components/layout'
@@ -89,14 +90,6 @@ const HeaderActionArea = (props: HeaderActionAreaProps) => {
           justifyContent: 'space-between',
         }}
       >
-        {showSearchBarInLargeHeader && (
-          <Box sx={headerActionAreaStyles.searchSuggestionsWrapper} data-testid="Search-container">
-            <SearchSuggestions
-              isViewSearchPortal={isMobileSearchPortalVisible}
-              onEnterSearch={() => toggleSearchBar(false)}
-            />
-          </Box>
-        )}
         <Box
           component={'section'}
           sx={{
@@ -107,7 +100,22 @@ const HeaderActionArea = (props: HeaderActionAreaProps) => {
             <KiboLogo logo={Logo} />
           </Link>
         </Box>
+        {showSearchBarInLargeHeader && (
+          <Box sx={headerActionAreaStyles.searchSuggestionsWrapper} data-testid="Search-container">
+            <SearchSuggestions
+              isViewSearchPortal={isMobileSearchPortalVisible}
+              onEnterSearch={() => toggleSearchBar(false)}
+            />
+          </Box>
+        )}
+
         <NoSsr>
+          <Box sx={headerActionAreaStyles.searchSuggestionsWrapper} data-testid="Search-container">
+            <AiSearchSuggestions
+              isViewSearchPortal={isMobileSearchPortalVisible}
+              onEnterSearch={() => toggleSearchBar(false)}
+            />
+          </Box>
           <Box display="flex" flex={1} justifyContent={'flex-end'} gap={1}>
             {!isCSR && (
               <>

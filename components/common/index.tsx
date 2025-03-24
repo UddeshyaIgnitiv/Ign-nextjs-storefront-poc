@@ -21,6 +21,7 @@ export { default as ReviewProductItemsWithAddresses } from './ReviewProductItems
 export { default as PromoCodeBadge } from './PromoCodeBadge/PromoCodeBadge'
 export { default as QuantitySelector } from './QuantitySelector/QuantitySelector'
 export { default as SearchBar } from './SearchBar/SearchBar'
+export { default as AiSearchBar } from './AiSearchBar/AiSearchBar'
 export { default as OrderPrice } from './OrderPrice/OrderPrice'
 export { default as AddressList } from './AddressList/AddressList'
 export { default as GlobalFetchingIndicator } from './GlobalFetchingIndicator/GlobalFetchingIndicator'
