@@ -87,39 +87,17 @@ interface SearchSuggestionData {
 
 const getSearchSuggestionResult = async (searchTerm: string): Promise<SearchSuggestionData> => {
   try {
-    const response = await fetch(
-      `https://corsproxy.io/?${encodeURIComponent('http://3.140.208.72:5000/search')}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: searchTerm,
-        }),
-      }
-    )
+    const response = await fetch('/api/search-suggestions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ searchTerm }),
+    })
 
     if (!response.ok) throw new Error('Failed to fetch suggestions')
 
-    const apiData = await response.json()
-
-    // Transform the API response array into the expected format
-    return {
-      suggestionGroups: [
-        {
-          name: 'Products',
-          suggestions: apiData.map((product: any) => ({
-            suggestion: {
-              productCode: product.productCode,
-              name: product.productName,
-              brand: product.brand,
-              price: product.price,
-            },
-          })),
-        },
-      ],
-    }
+    return await response.json()
   } catch (error) {
     console.error('Search suggestion error:', error)
     return { suggestionGroups: [] }
