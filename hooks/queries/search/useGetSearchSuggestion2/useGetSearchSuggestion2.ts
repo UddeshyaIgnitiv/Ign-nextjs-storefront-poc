@@ -87,7 +87,7 @@ interface SearchSuggestionData {
 
 const getSearchSuggestionResult = async (searchTerm: string): Promise<SearchSuggestionData> => {
   try {
-    const response = await fetch('http://3.140.208.72:5000/search', {
+    const response = await fetch('https://corsproxy.io/?http://3.140.208.72:5000/search', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
