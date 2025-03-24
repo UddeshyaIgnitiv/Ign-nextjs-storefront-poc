@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const { i18n } = require('./next-i18next.config')
 
 const LOCATION_COOKIE = 'kibo_purchase_location'
@@ -70,6 +71,31 @@ module.exports = {
         name: 'Credit / Debit Card',
       },
     ],
+    async headers() {
+      return [
+        {
+          source: '/(.*)',
+          headers: [
+            {
+              key: 'Access-Control-Allow-Origin',
+              value: '*',
+            },
+            {
+              key: 'Access-Control-Allow-Methods',
+              value: 'GET, POST, PUT, DELETE, OPTIONS',
+            },
+            {
+              key: 'Access-Control-Allow-Headers',
+              value: 'X-Requested-With, Content-Type, Authorization',
+            },
+            {
+              key: 'Access-Control-Allow-Credentials',
+              value: 'true',
+            },
+          ],
+        },
+      ]
+    },
     countries: ['US', 'AT', 'DE', 'NL', 'CA'],
     debounceTimeout: '1000',
     productListing: {
