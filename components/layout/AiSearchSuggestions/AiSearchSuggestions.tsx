@@ -136,8 +136,16 @@ const AiSearchSuggestions = (props: AiSearchSuggestionsProps) => {
             <Title heading="products" />
             {productSuggestions.map(({ suggestion }) => (
               <Content
-                key={suggestion.productCode}
-                code={String(suggestion.productCode)}
+                key={
+                  suggestion.productCode
+                    ? String(suggestion.productCode).padStart(13, '0')
+                    : '0000000000000'
+                }
+                code={
+                  suggestion.productCode
+                    ? String(suggestion.productCode).padStart(13, '0')
+                    : '0000000000000'
+                }
                 name={suggestion.name}
                 path="/product/"
                 onSearchSuggestionClose={handleClose}
