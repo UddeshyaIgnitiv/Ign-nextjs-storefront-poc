@@ -19,7 +19,7 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script
+          {/* <script
             dangerouslySetInnerHTML={{
               __html: `
                 (function(d, t) {
@@ -36,6 +36,24 @@ export default class MyDocument extends Document {
                   s.parentNode.insertBefore(v, s);
                 })(document, 'script');
               `,
+            }}
+          /> */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(d, t) {
+      var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      v.onload = function() {
+        window.voiceflow.chat.load({
+          verify: { projectID: '67beb4164b2bd5ffce20d74a' },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production',
+          voice: {
+            url: "https://runtime-api.voiceflow.com"
+          }
+        });
+      }
+      v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+  })(document, 'script');`,
             }}
           />
         </body>
