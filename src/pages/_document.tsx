@@ -45,7 +45,7 @@ export default class MyDocument extends Document {
                   window.voiceflow.chat.load({
                     verify: { projectID: '67beb4164b2bd5ffce20d74a' },
                     url: 'https://general-runtime.voiceflow.com',
-                    versionID: 'production',
+                    versionID: '67beb4164b2bd5ffce20d74b',
                     assistant: {
                       voice: true,
                       title: "Smart Assistant",
