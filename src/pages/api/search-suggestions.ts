@@ -54,7 +54,7 @@ export default async function searchSuggestionsHandler(
       return
     }
 
-    const externalResponse = await fetch('http://3.140.208.72:5000/search', {
+    const externalResponse = await fetch('http://3.145.25.189:5000/search', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
