@@ -37,7 +37,9 @@ export default class MyDocument extends Document {
   })(document, 'script');`,
             }}
           /> */}
+
           <script
+            // Voiceflow Script for chatbot
             dangerouslySetInnerHTML={{
               __html: `(function(d, t) {
                 var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
