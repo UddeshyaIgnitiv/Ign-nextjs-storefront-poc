@@ -41,7 +41,6 @@ const LoginFooter = (props: LoginFooterProps) => {
 const LoginDialog = () => {
   const { t } = useTranslation('common')
 
-
   const { showModal, closeModal } = useModalContext()
 
   const onRegisterClick = () => {
@@ -55,11 +54,7 @@ const LoginDialog = () => {
   return (
     <KiboDialog
       Title={t('log-in')}
-      Content={
-        <LoginContent
-          onForgotPasswordClick={onForgotPassword}
-        />
-      }
+      Content={<LoginContent onForgotPasswordClick={onForgotPassword} />}
       Actions={<LoginFooter onRegisterNow={onRegisterClick} />}
       customMaxWidth="32.375rem"
       onClose={closeModal}

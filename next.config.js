@@ -7,6 +7,21 @@ const LOCATION_COOKIE = 'kibo_purchase_location'
 const DEFAULT_WISHLIST_NAME = 'default-wishlist'
 
 module.exports = {
+  webpack: (config) => {
+    // Alias 'node:buffer' to 'buffer'
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'node:buffer': 'buffer',
+    }
+
+    // Ensure 'buffer' is polyfilled (if needed)
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      buffer: require.resolve('buffer/'),
+    }
+
+    return config
+  },
   devIndicators: {
     autoPrerender: false,
   },
