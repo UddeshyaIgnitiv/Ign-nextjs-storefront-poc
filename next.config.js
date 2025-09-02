@@ -34,7 +34,10 @@ module.exports = {
     styledComponents: true,
     emotion: true,
   },
-  i18n,
+  i18n: {
+    localeDetection: false,
+    ...i18n,
+  },
   images: {
     domains: [
       'd1slj7rdbjyb5l.cloudfront.net',
