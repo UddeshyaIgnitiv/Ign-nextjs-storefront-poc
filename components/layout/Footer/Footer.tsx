@@ -2,6 +2,7 @@ import { Grid, Typography, Box, Link } from '@mui/material'
 import { useTranslation } from 'next-i18next'
 
 import { KiboImage } from '@/components/common'
+import Chatbot from '@/components/common/Chatbot/Chatbot'
 
 const FooterItemLink = (props: any) => {
   return (
@@ -69,6 +70,7 @@ export default function Footer(props: any) {
           ))}
         </Grid>
       </Grid>
+      <Chatbot />
     </Box>
   )
 }

@@ -130,3 +130,19 @@ body {
   margin: 0;
   padding: 2rem;
 }
+
+/* Add to existing CSS */
+.webchat__bubble {
+  max-width: 80% !important;
+  border-radius: 18px !important;
+}
+
+.webchat__bubble--user {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.webchat__button {
+  border-radius: 50% !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
