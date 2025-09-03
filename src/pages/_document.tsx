@@ -28,7 +28,7 @@ export default class MyDocument extends Document {
                   if (typeof window === 'undefined') return;
                   
                   // ---- CONFIG ----
-                  const RASA_URL = "http://3.149.71.6:5005";
+                  const RASA_URL = "https://8e32c1de6020.ngrok-free.app";
                   const PDP_BASE = "https://ignitiv-nextjs-storefront-poc.vercel.app/product/";
                   const sessionId = "user_" + Math.floor(Math.random()*1e9);
 
