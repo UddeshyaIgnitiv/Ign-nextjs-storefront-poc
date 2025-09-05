@@ -1,16 +1,15 @@
 import React from 'react'
 
 import { CacheProvider, EmotionCache } from '@emotion/react'
-// eslint-disable-next-line import/order
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AppProps } from 'next/app'
 import getConfig from 'next/config'
 import Head from 'next/head'
-import { appWithTranslation } from 'next-i18next'
-import 'next-i18next.config'
-// eslint-disable-next-line import/order
 import Router from 'next/router'
+import { appWithTranslation } from 'next-i18next'
 import NProgress from 'nprogress'
 
+import CartBridge from '@/components/common/chatBoxBrides/CartBridge'
 import { DefaultLayout } from '@/components/layout'
 import { RQNotificationContextProvider } from '@/context'
 import createEmotionCache from '@/lib/createEmotionCache'
@@ -21,6 +20,7 @@ import '@splidejs/react-splide/css'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
+const queryClient = new QueryClient()
 
 type KiboAppProps = AppProps & {
   emotionCache?: EmotionCache
@@ -51,9 +51,12 @@ const App = (props: KiboAppProps) => {
         )}
       </Head>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <RQNotificationContextProvider>
-        {getLayout(<Component {...pageProps} />)}
-      </RQNotificationContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <RQNotificationContextProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <CartBridge />
+        </RQNotificationContextProvider>
+      </QueryClientProvider>
     </CacheProvider>
   )
 }

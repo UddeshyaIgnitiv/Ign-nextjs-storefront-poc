@@ -28,7 +28,7 @@ export default class MyDocument extends Document {
                   if (typeof window === 'undefined') return;
                   
                   // ---- CONFIG ----
-                  const RASA_URL = "https://8e32c1de6020.ngrok-free.app";
+                  const RASA_URL = "http://3.149.71.6:5005";
                   const PDP_BASE = "https://ignitiv-nextjs-storefront-poc.vercel.app/product/";
                   const sessionId = "user_" + Math.floor(Math.random()*1e9);
 
@@ -174,9 +174,21 @@ export default class MyDocument extends Document {
 
                           b.querySelectorAll(".btn").forEach(el => {
                             el.onclick = () => {
-                              const url = el.getAttribute("data-url");
-                              if (!url) return;
-                              window.open(url, "_blank");
+                              if (el.textContent === "Add to cart") {
+                                window.dispatchEvent(
+                                new CustomEvent("chatbot:addToCart", {
+                                    detail: {
+                                      productCode: "12345",
+                                      variationProductCode: "12345-RED",
+                                      options: [{ attributeFQN: "tenant~color", value: "Red" }],
+                                      quantity: 1,
+                                    },
+                                  })
+                                )
+                              } else { 
+                                const url = el.getAttribute("data-url");
+                                if (url) window.open(url, "_blank");
+                              }
                             };
                           });
 
