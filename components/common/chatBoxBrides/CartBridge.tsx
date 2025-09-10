@@ -1,51 +1,47 @@
 import React, { useEffect } from 'react'
 
-import { useAddCartItem } from '@/hooks'
+import { useAddCartItem, useConfigureProduct } from '@/hooks'
 
 export default function CartBridge() {
   const { addToCart } = useAddCartItem()
+  const { configureProduct } = useConfigureProduct()
 
   useEffect(() => {
     const handler = async (e: Event) => {
       const customEvent = e as CustomEvent<{
         productCode: string
-        variationProductCode?: string
         options?: any[]
         quantity?: number
       }>
 
-      const { productCode, variationProductCode, options, quantity } = customEvent.detail
+      const { productCode, options = [], quantity = 1 } = customEvent.detail
 
-      const variables = {
-        productToAdd: {
-          product: {
-            productCode: '0732017701701',
-            variationProductCode: '0732017701701-0019007',
-            options: [
-              { attributeFQN: 'tenant~color', value: '23', shopperEnteredValue: null },
-              { attributeFQN: 'tenant~size', value: '3', shopperEnteredValue: null },
-            ],
-          },
-          quantity: 1,
-          fulfillmentMethod: 'Ship',
-        },
-      }
-
-      // Build the payload
-      const addToCartPayload = {
-        product: {
-          productCode: variables.productToAdd.product.productCode,
-          variationProductCode: variables.productToAdd.product.variationProductCode,
-          fulfillmentMethod: variables.productToAdd.fulfillmentMethod,
-          options: variables.productToAdd.product.options,
-          //purchaseLocationCode: selectedFulfillmentOption?.location?.code as string,
-        },
-        quantity: variables.productToAdd.quantity,
-      }
+      console.log('🛒 Chatbot event received:', { productCode, options, quantity })
 
       try {
+        const { variationProductCode } = await configureProduct.mutateAsync({
+          productCode,
+          quantity,
+          updatedOptions: options,
+        })
+
+        if (!variationProductCode) {
+          console.error('❌ No variationProductCode returned from configureProduct')
+          return
+        }
+
+        const addToCartPayload = {
+          product: {
+            productCode,
+            variationProductCode,
+            fulfillmentMethod: 'Ship',
+            options,
+          },
+          quantity,
+        }
+
         await addToCart.mutateAsync(addToCartPayload)
-        console.log('✅ Product added from chatbot')
+        console.log('✅ Product added from chatbot', addToCartPayload)
       } catch (err) {
         console.error('❌ Failed to add product from chatbot', err)
       }
@@ -53,7 +49,7 @@ export default function CartBridge() {
 
     window.addEventListener('chatbot:addToCart', handler)
     return () => window.removeEventListener('chatbot:addToCart', handler)
-  }, [addToCart])
+  }, [addToCart, configureProduct])
 
   return null
 }

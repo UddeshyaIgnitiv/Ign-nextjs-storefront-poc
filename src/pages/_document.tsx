@@ -129,7 +129,43 @@ export default class MyDocument extends Document {
                       body.scrollTop = body.scrollHeight;
                     }
 
-                    function addBot(text, buttons) {
+                    async function fetchProductDetails(productCode) {
+                      const query = \`
+                      query product($productCode: String!) {
+                       product(productCode: $productCode) {
+													productCode
+													content {
+														productName
+														productShortDescription
+														productImages {
+															imageUrl
+														}
+													}
+													options {
+														attributeFQN
+														attributeDetail {
+															name
+														}
+														values {
+															value
+														}
+													}
+													price {
+														price
+														salePrice
+													}
+												}
+                      }
+                      \`;
+                      const res = await fetch('/api/graphql', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ operationName: "product" ,query, variables: { productCode } }) });
+                      const data = await res.json();
+                      return data?.data?.product || null;
+                    }
+
+                    async function addBot(text, buttons) {
                       const row = document.createElement("div"); 
                       row.className = "msg bot";
                       const b = document.createElement("div"); 
@@ -138,10 +174,58 @@ export default class MyDocument extends Document {
                       if (text && text.startsWith("CARD::")) {
                         try {
                           const j = JSON.parse(text.replace("CARD::", ""));
+                          let paddedCode;
+													if (j.code_print.toString().length === 15) {
+														paddedCode = "00" + j.code_print;
+													} else {
+														paddedCode = j.code_print.toString().padStart(13, "0");
+													}
+
+													const product = await fetchProductDetails(paddedCode);
+                          console.log("CARD DATA:", product);
                           // Prefer URL from server; fallback to building from code_print/product_id
                           const code = j.code_print || j.product_id || "";
                           const builtUrl = code ? (PDP_BASE + encodeURIComponent(code)) : "";
                           const openUrl = j.product_url || builtUrl;
+													let optionsHtml = "";
+
+													if(!product){
+														optionsHtml = \`
+															<div style="color:red; font-weight:bold; margin:8px 0;">
+																Out of stock
+															</div>
+														\`;
+													} else {
+														optionsHtml = (product.options || [])
+															.map(opt => {
+																const valuesHtml = opt.values
+																.map(v => \`
+																	<span class="opt" 
+																	data-attr="\${opt.attributeFQN}" 
+																	data-value="\${v.value}"
+																	style="
+																		display:inline-block;
+																		margin:4px;
+																		padding:6px 10px;
+																		border:1px solid #333;
+																		border-radius:4px;
+																		cursor:pointer;
+																	">
+																	\${v.value}
+																	</span>
+																\`)
+																.join("");
+
+															return \`
+															<div class="option-group" style="margin:6px 0;">
+																<div><b>\${(opt.attributeDetail && opt.attributeDetail.name) || ""}</b></div>
+																<div>\${valuesHtml}</div>
+															</div>
+															\`;
+														})
+														.join("");
+													}
+
 
                           b.innerHTML = \`
                             <div class="card">
@@ -149,6 +233,7 @@ export default class MyDocument extends Document {
                               <h4 style="margin: 6px 0;">\${j.name || ""}</h4>
                               <p style="margin: 4px 0;"><b>Price:</b> \${j.price || ""}</p>
                               \${j.description ? \`<p style="color: #555; margin: 4px 0;">\${j.description}</p>\` : ""}
+                              <div class="options" style="margin:10px 0;">\${optionsHtml}</div>
                               <div class="btns" style="margin-top: 8px;">
                                 <span class="btn" data-action="open" data-url="\${openUrl}" style="
                                   display: inline-block;
@@ -172,15 +257,36 @@ export default class MyDocument extends Document {
                             </div>
                           \`;
 
+							const selectedOptions = {};
+
+							b.querySelectorAll(".opt").forEach(el => {
+								el.addEventListener("click", () => {
+									const attr = el.getAttribute("data-attr");
+									const val = el.getAttribute("data-value");
+
+									selectedOptions[attr] = val;
+
+									el.parentNode.querySelectorAll(".opt").forEach(optEl => {
+										optEl.style.background = "";
+										optEl.style.color = "";
+									});
+									el.style.background = "#333";
+									el.style.color = "#fff";
+								});
+							});
+
                           b.querySelectorAll(".btn").forEach(el => {
                             el.onclick = () => {
                               if (el.textContent === "Add to cart") {
                                 window.dispatchEvent(
                                 new CustomEvent("chatbot:addToCart", {
                                     detail: {
-                                      productCode: "12345",
-                                      variationProductCode: "12345-RED",
-                                      options: [{ attributeFQN: "tenant~color", value: "Red" }],
+                                      productCode: product?.productCode || paddedCode,
+                                      variationProductCode: null,
+                                      options: Object.entries(selectedOptions).map(([attr, value]) => ({
+																				attributeFQN: attr,
+																				value
+																			})),
                                       quantity: 1,
                                     },
                                   })
