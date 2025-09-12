@@ -32,58 +32,76 @@ export default class MyDocument extends Document {
                   const PDP_BASE = "https://ignitiv-nextjs-storefront-poc.vercel.app/product/";
                   const sessionId = "user_" + Math.floor(Math.random() * 1e9);
 
-                  // Create chat UI
-                  const chatDiv = document.createElement('div');
-                  chatDiv.innerHTML = \`
-                    <div id="chat-container" style="
-                      position: fixed;
-                      right: 24px;
-                      bottom: 24px;
-                      width: 380px;
-                      height: 540px;
-                      background: #fff;
-                      border-radius: 12px;
-                      box-shadow: 0 8px 26px rgba(0,0,0,.12);
-                      display: flex;
-                      flex-direction: column;
-                      overflow: hidden;
-                      z-index: 1000;
-                    ">
-                      <div id="header" style="
-                        background: #0b61ff;
-                        color: #fff;
-                        padding: 14px 16px;
-                        font-weight: 700;
-                        border-top-left-radius: 12px;
-                        border-top-right-radius: 12px;
-                      ">The Ignitiv Store</div>
-                      <div id="body" style="
-                        flex: 1;
-                        padding: 12px;
-                        overflow-y: auto;
-                        background: #fafafa;
-                      "></div>
-                      <div id="input" style="
-                        display: flex;
-                        border-top: 1px solid #e5e5e5;
-                      ">
-                        <input id="txt" placeholder="Type your message..." style="
-                          flex: 1;
-                          padding: 12px;
-                          border: 0;
-                          font-size: 14px;
-                        "/>
-                        <button id="send-btn" style="
-                          border: 0;
-                          background: #0b61ff;
-                          color: #fff;
-                          padding: 0 14px;
-                          cursor: pointer;
-                        ">▶</button>
-                      </div>
-                    </div>
-                  \`;
-                  document.body.appendChild(chatDiv);
+									const iconBtn = document.createElement("div");
+									iconBtn.innerHTML = \`<img src="/icons/chatbot-speech-bubble.svg" alt="Chatbot" class="chatbot-icon chatbot-icon--medium">\`;
+									iconBtn.style = \`
+										position: fixed;
+										right: 24px;
+										bottom: 24px;
+										width: 60px;
+										height: 60px;
+										color: #fff;
+										display: flex;
+										align-items: center;
+										justify-content: center;
+										border-radius: 50%;
+										cursor: pointer;
+										font-size: 28px;
+										z-index: 999;
+									\`;
+									document.body.appendChild(iconBtn);
+
+									const chatDiv = document.createElement("div");
+									chatDiv.innerHTML = \`
+										<div id="chat-container" style="
+											position: fixed;
+											right: 24px;
+											bottom: 100px;
+											width: 380px;
+											height: 540px;
+											background: #fff;
+											border-radius: 12px;
+											box-shadow: 0 8px 26px rgba(0,0,0,.12);
+											display: none;
+											flex-direction: column;
+											overflow: hidden;
+											z-index: 1000;
+										">
+											<div id="header" style="
+												background: #0b61ff;
+												color: #fff;
+												padding: 14px 16px;
+												font-weight: 700;
+											">
+												The Ignitiv Store
+												<span id="close-chat" style="float:right;cursor:pointer;">✖</span>
+											</div>
+											<div id="body" style="
+												flex: 1;
+												padding: 12px;
+												overflow-y: auto;
+												background: #fafafa;
+											"></div>
+											<div id="input" style="display: flex; border-top: 1px solid #e5e5e5;">
+												<input id="txt" placeholder="Type your message..." style="flex:1; padding:12px; border:0; font-size:14px;" />
+												<button id="send-btn" style="border:0;background:#0b61ff;color:#fff;padding:0 14px;cursor:pointer;">▶</button>
+											</div>
+										</div>
+									\`;
+									document.body.appendChild(chatDiv);
+
+									const chatContainer = document.getElementById("chat-container");
+									const closeBtn = document.getElementById("close-chat");
+
+									// Toggle open/close
+									iconBtn.onclick = () => {
+										chatContainer.style.display = "flex";
+										iconBtn.style.display = "none";
+									};
+									closeBtn.onclick = () => {
+										chatContainer.style.display = "none";
+										iconBtn.style.display = "flex";
+									};
 
                   const body = document.getElementById("body");
                   const input = document.getElementById("txt");
@@ -201,24 +219,8 @@ export default class MyDocument extends Document {
 														
                             \${product ? \`
 															<div class="btns" style="margin-top:8px;">
-																<span class="btn" data-action="open" data-url="\${openUrl}" style="
-																	display:inline-block;
-																	margin:0 6px 6px 0;
-																	padding:6px 10px;
-																	border-radius:6px;
-																	background:#e8f0ff;
-																	border:1px solid #c7daff;
-																	cursor:pointer;
-																">Add to cart</span>
-																<span class="btn" data-action="open" data-url="\${openUrl}" style="
-																	display:inline-block;
-																	margin:0 6px 6px 0;
-																	padding:6px 10px;
-																	border-radius:6px;
-																	background:#e8f0ff;
-																	border:1px solid #c7daff;
-																	cursor:pointer;
-																">Buy Product</span>
+																<span class="btn" data-action="open" data-url="\${openUrl}" >Add to cart</span>
+																<span class="btn" data-action="open" data-url="\${openUrl}" >Buy Product</span>
 															</div>
 														\` : ""}
                           </div>
@@ -270,7 +272,6 @@ export default class MyDocument extends Document {
                         buttons.forEach(btn => {
                           const el = document.createElement("span"); 
                           el.className = "btn";
-                          el.style = "display:inline-block;margin:0 6px 6px 0;padding:6px 10px;border-radius:6px;background:#e8f0ff;border:1px solid #c7daff;cursor:pointer;";
                           el.textContent = btn.title || btn.payload;
                           el.onclick = () => send(btn);
                           box.appendChild(el);
