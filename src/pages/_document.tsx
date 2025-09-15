@@ -33,22 +33,8 @@ export default class MyDocument extends Document {
                   const sessionId = "user_" + Math.floor(Math.random() * 1e9);
 
 									const iconBtn = document.createElement("div");
+									iconBtn.className = "chatbot-button";
 									iconBtn.innerHTML = \`<img src="/icons/chatbot-speech-bubble.svg" alt="Chatbot" class="chatbot-icon chatbot-icon--medium">\`;
-									iconBtn.style = \`
-										position: fixed;
-										right: 24px;
-										bottom: 24px;
-										width: 60px;
-										height: 60px;
-										color: #fff;
-										display: flex;
-										align-items: center;
-										justify-content: center;
-										border-radius: 50%;
-										cursor: pointer;
-										font-size: 28px;
-										z-index: 999;
-									\`;
 									document.body.appendChild(iconBtn);
 
 									const chatDiv = document.createElement("div");

@@ -97,3 +97,28 @@
 .msg .btns .btn:hover {
   background: #084acc;
 }
+
+.chatbot-icon {
+  filter: brightness(0) invert(1);
+  width: 50%;
+}
+
+.chatbot-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 60px;
+  height: 60px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 28px;
+  z-index: 999;
+  background-color: #2ea195;
+}
+.chatbot-button:hover {
+  background-color: #207068;
+}
