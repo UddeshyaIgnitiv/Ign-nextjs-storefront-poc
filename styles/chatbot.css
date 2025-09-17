@@ -10,7 +10,7 @@
 }
 
 .msg.user .bubble {
-  background: #0b61ff;
+  background: #2ea195;
   color: #fff;
   border-radius: 16px 16px 4px 16px;
   padding: 10px 14px;
@@ -47,7 +47,7 @@
 }
 
 #chat-container #header {
-  background: #0b61ff;
+  background: #2ea195;
   color: #fff;
   padding: 14px 16px;
   font-weight: 700;
@@ -74,7 +74,7 @@
 
 #chat-container #input button {
   border: 0;
-  background: #0b61ff;
+  background: #2ea195;
   color: #fff;
   padding: 0 14px;
   cursor: pointer;
@@ -85,7 +85,7 @@
   margin: 6px 6px 0 0;
   padding: 8px 14px;
   border-radius: 6px;
-  background: #0b61ff;
+  background: #2ea195;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
@@ -95,7 +95,7 @@
 }
 
 .msg .btns .btn:hover {
-  background: #084acc;
+  background: #207068;
 }
 
 .chatbot-icon {
@@ -121,4 +121,93 @@
 }
 .chatbot-button:hover {
   background-color: #207068;
+}
+
+#header {
+  background: #2ea195;
+  color: #fff;
+  padding: 14px 16px;
+  font-weight: 700;
+}
+
+#body {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background: #fafafa;
+}
+
+.initial-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 20px;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #111;
+  margin-top: 8px;
+}
+
+.welcome-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.welcome-btn.product {
+  background: #f5f9ff;
+  border: 1px solid #d0e2ff;
+}
+
+.welcome-btn.order {
+  background: #f9fffb;
+  border: 1px solid #c7f0d2;
+}
+
+.icon {
+  color: #fff;
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon.blue {
+  background: #3b82f6;
+}
+
+.icon.green {
+  background: #10b981;
+}
+
+.btn-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #222;
+}
+
+.btn-subtitle {
+  font-size: 12px;
+  color: #666;
 }

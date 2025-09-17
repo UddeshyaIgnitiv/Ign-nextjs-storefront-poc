@@ -39,38 +39,38 @@ export default class MyDocument extends Document {
 
 									const chatDiv = document.createElement("div");
 									chatDiv.innerHTML = \`
-										<div id="chat-container" style="
-											position: fixed;
-											right: 24px;
-											bottom: 100px;
-											width: 380px;
-											height: 540px;
-											background: #fff;
-											border-radius: 12px;
-											box-shadow: 0 8px 26px rgba(0,0,0,.12);
-											display: none;
-											flex-direction: column;
-											overflow: hidden;
-											z-index: 1000;
-										">
-											<div id="header" style="
-												background: #0b61ff;
-												color: #fff;
-												padding: 14px 16px;
-												font-weight: 700;
-											">
+										<div id="chat-container">
+											<div id="header">
 												The Ignitiv Store
 												<span id="close-chat" style="float:right;cursor:pointer;">✖</span>
 											</div>
-											<div id="body" style="
-												flex: 1;
-												padding: 12px;
-												overflow-y: auto;
-												background: #fafafa;
-											"></div>
+                      <div id="body">
+                      <div class="initial-card">
+                        <div class="header">
+                          <div class="title">E-commerce Bot</div>
+                          <div class="subtitle">How can I help you today?</div>
+                        </div>
+
+                        <div class="welcome-btn product" data-action="product">
+                          <div class="icon blue">📦</div>
+                          <div>
+                            <div class="btn-title">Product Recommendation</div>
+                            <div class="btn-subtitle">Find the perfect products for you</div>
+                          </div>
+                        </div>
+
+                        <div class="welcome-btn order" data-action="order">
+                          <div class="icon green">🚚</div>
+                          <div>
+                            <div class="btn-title">Order Tracking</div>
+                            <div class="btn-subtitle">Check the status of your order</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 											<div id="input" style="display: flex; border-top: 1px solid #e5e5e5;">
 												<input id="txt" placeholder="Type your message..." style="flex:1; padding:12px; border:0; font-size:14px;" />
-												<button id="send-btn" style="border:0;background:#0b61ff;color:#fff;padding:0 14px;cursor:pointer;">▶</button>
+												<button id="send-btn" style="border:0;background:#2ea195;color:#fff;padding:0 14px;cursor:pointer;">▶</button>
 											</div>
 										</div>
 									\`;
@@ -133,7 +133,10 @@ export default class MyDocument extends Document {
                           options {
                             attributeFQN
                             attributeDetail { name }
-                            values { value }
+                            values { 
+                              value
+                              stringValue
+                            }
                           }
                           price {
                             price
@@ -184,7 +187,7 @@ export default class MyDocument extends Document {
                                 border:1px solid #333;
                                 border-radius:4px;
                                 cursor:pointer;
-                              ">\${v.value}</span>
+                              ">\${v.stringValue}</span>
                             \`).join("");
                             return \`
                               <div class="option-group" style="margin:6px 0;">
@@ -206,7 +209,7 @@ export default class MyDocument extends Document {
                             \${product ? \`
 															<div class="btns" style="margin-top:8px;">
 																<span class="btn" data-action="open" data-url="\${openUrl}" >Add to cart</span>
-																<span class="btn" data-action="open" data-url="\${openUrl}" >Buy Product</span>
+																<a class="btn" href="/product/\${j.code_print}">Buy Product</a>
 															</div>
 														\` : ""}
                           </div>
@@ -300,15 +303,28 @@ export default class MyDocument extends Document {
                       removeTyping();
                       addBot("Sorry, something went wrong.");
                     }
-                  }
-
-                  // Initial greeting
-                  send("hi");
+                  } 
 
                   sendBtn.addEventListener('click', () => send());
                   input.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') send();
                   });
+
+                  document.querySelectorAll(".welcome-btn").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                      const action = btn.getAttribute("data-action");
+                      let message = "";
+                      if (action === "product") {
+                        message = "Product Recommendation"; 
+                      } else if (action === "order") {
+                        message = "Order Tracking"; 
+                      }
+                      if (message) {
+                        send(message);
+                      }
+                    });
+                  });
+
                 })();
               `,
             }}
