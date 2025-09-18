@@ -1,9 +1,7 @@
 import * as React from 'react'
 
-import createEmotionServer from '@emotion/server/create-instance'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
-import createEmotionCache from '../../lib/createEmotionCache'
 import theme from '../../styles/theme'
 
 export default class MyDocument extends Document {
@@ -209,7 +207,7 @@ export default class MyDocument extends Document {
                             \${product ? \`
 															<div class="btns" style="margin-top:8px;">
 																<span class="btn" data-action="open" data-url="\${openUrl}" >Add to cart</span>
-																<a class="btn" href="/product/\${j.code_print}">Buy Product</a>
+																<a class="btn" target="_blank" href="/product/\${paddedCode}">Buy Product</a>
 															</div>
 														\` : ""}
                           </div>
