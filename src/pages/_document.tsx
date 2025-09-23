@@ -116,6 +116,18 @@ export default class MyDocument extends Document {
                     body.scrollTop = body.scrollHeight;
                   }
 
+									async function getCurrentUserId() {
+										try {
+											const res = await fetch("/api/rasa/user");
+											const data = await res.json();
+											return data.userId;
+										} catch (e) {
+											console.error("Failed to get user ID", e);
+											return null;
+										}
+									}
+
+
                   async function fetchProductDetails(productCode) {
                     const query = \`
                       query product($productCode: String!) {
@@ -157,7 +169,46 @@ export default class MyDocument extends Document {
                     row.className = "msg bot";
                     const b = document.createElement("div"); 
                     b.className = "bubble";
+                    const rowOrder = document.createElement("div");
 
+										const orderRegex = /Thanks for the order number/;
+										const orderMatch = text.match(/I’ve saved it\./);
+                    if (orderMatch) {
+                        const orderId = orderMatch?.input?.split("**")
+                        const orderNumber = orderId[1] ? parseInt(orderId[1], 10) : null
+                        rowOrder.className = "msg bot";
+                        const c = document.createElement("div"); 
+                        c.className = "bubble orderStatus";
+                        c.innerHTML = 'Looking for order...';
+                        getCurrentUserId().then(async userId => {
+													if (userId) {
+														try {
+                              const res = await fetch("/api/rasa/order", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                  orderNumber: orderNumber.toString()
+                                }),
+                              })
+
+                              const data = await res.json()
+
+                              if (data?.orders?.items?.length > 0) {
+                                const order = data?.orders?.items[0]
+                                c.innerHTML = \`📦 Order <b>\${order.orderNumber}</b> is currently: <i>\${order.status}</i>\`;
+                              } else {
+                                c.innerHTML  = \`Sorry, I couldn’t find details for order <b>\${orderNumber}</b>.\`
+                              }
+                            } catch (err) {
+                              console.error("Error fetching order:", err)
+                              c.innerHTML = \`Something went wrong while fetching your order details.\`
+                            }
+													} else {
+                            c.innerHTML = \`Please log in to track your orders.\`
+													}
+												});
+                        rowOrder.appendChild(c); 
+                    }  
                     if (text && text.startsWith("CARD::")) {
                       try {
                         const j = JSON.parse(text.replace("CARD::", ""));
@@ -207,7 +258,7 @@ export default class MyDocument extends Document {
                             \${product ? \`
 															<div class="btns" style="margin-top:8px;">
 																<span class="btn" data-action="open" data-url="\${openUrl}" >Add to cart</span>
-																<a class="btn" target="_blank" href="/product/\${paddedCode}">Buy Product</a>
+																<a class="btn" href="/product/\${j.code_print}">Buy Product</a>
 															</div>
 														\` : ""}
                           </div>
@@ -268,7 +319,8 @@ export default class MyDocument extends Document {
                     }
 
                     row.appendChild(b); 
-                    body.appendChild(row); 
+                    body.appendChild(row);
+                    body.appendChild(rowOrder);   
                     body.scrollTop = body.scrollHeight;
                   }
 

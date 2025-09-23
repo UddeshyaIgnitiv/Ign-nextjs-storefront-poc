@@ -30,6 +30,16 @@
   max-width: 80%;
   word-wrap: break-word;
 }
+.msg.bot .bubble.orderStatus {
+  background: #e0f7fa;
+  color: #006064;
+  border-radius: 16px 16px 16px 16px;
+  padding: 12px 16px;
+  max-width: 70%;
+  font-weight: bold;
+  word-wrap: break-word;
+  border: 1px solid #00acc1;
+}
 
 #chat-container {
   position: fixed;
