@@ -1,4 +1,6 @@
 /* Make clicks pass-through */
+@import './chatbot.css';
+
 #nprogress {
   pointer-events: none;
   z-index: 2000;
