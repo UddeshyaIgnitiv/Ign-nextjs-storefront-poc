@@ -195,7 +195,7 @@ export default class MyDocument extends Document {
 
                               if (data?.orders?.items?.length > 0) {
                                 const order = data?.orders?.items[0]
-                                c.innerHTML = \`📦 Order <b>\${order.orderNumber}</b> is currently: <i>\${order.status}</i>\`;
+                                c.innerHTML = \`Found it! Order # <b>\${order.orderNumber}</b><br>Status: <b>\${order.status}</b>\`;
                               } else {
                                 c.innerHTML  = \`Sorry, I couldn’t find details for order <b>\${orderNumber}</b>.\`
                               }
